@@ -203,6 +203,20 @@ class File(_FileBase):
     def b64_md5(self) -> str:
         return b64encode(self.md5.digest()).decode('ascii')
 
+    @property
+    def uri(self) -> str:
+        """:class:`str`: Returns the ``attachment://<filename>`` URI for this file.
+        This is used in certain places such as embeds or components to refer
+        to an uploaded file via URL.
+
+        .. note::
+            Due to Discord's filename processing, the filename must be ASCII aphanumeric
+            with underscores, dashes, and periods.
+
+        .. versionadded:: 2.6
+        """
+        return f'attachment://{self.filename}'
+
     @cached_slot_property('_cs_size')
     def size(self) -> int:
         self.fp.seek(0, os.SEEK_END)

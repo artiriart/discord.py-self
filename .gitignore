@@ -20,3 +20,4 @@ backup/
 build/*
 uv.lock*
 pylock*.toml
+discord.py-self.code-workspace

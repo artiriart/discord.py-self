@@ -971,16 +971,6 @@ class VideoQualityMode(Enum):
         return self.value
 
 
-class ComponentType(Enum):
-    action_row = 1
-    button = 2
-    select = 3
-    text_input = 4
-
-    def __int__(self) -> int:
-        return self.value
-
-
 class ButtonStyle(Enum):
     primary = 1
     secondary = 2

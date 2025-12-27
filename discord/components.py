@@ -350,7 +350,7 @@ class Button(Component):
             _generate_nonce(),
             InteractionType.component,
             None,
-            message.channel,  # type: ignore # channel is always correct here
+            message.channel,
             self.to_dict(), # type:ignore
             message=message,
         )
@@ -416,7 +416,7 @@ class SelectMenu(Component):
     __repr_info__: ClassVar[Tuple[str, ...]] = __slots__
 
     def __init__(self, data: SelectMenuPayload, /) -> None:
-        self.type: ComponentType = try_enum(ComponentType, data['type']) #type:ignore
+        self.type: ComponentType = try_enum(ComponentType, data['type'])
         self.custom_id: str = data['custom_id']
         self.placeholder: Optional[str] = data.get('placeholder')
         self.min_values: int = data.get('min_values', 1)
