@@ -1773,7 +1773,7 @@ class ConnectionState:
         self.dispatch('message', message)
         if self._messages is not None:
             self._messages.append(message)
-        if message.call is not None:
+        if getattr(message, "call", None) is not None:
             self._call_message_cache[message.id] = message
         if channel:
             channel.last_message_id = message.id  # type: ignore
@@ -1782,7 +1782,6 @@ class ConnectionState:
         if (
             not message.author.is_blocked()
             and not (channel.type == ChannelType.group and message.type == MessageType.recipient_remove)
-            and message._is_self_mentioned()
         ):
             # Increment mention count if applicable
             read_state.badge_count += 1

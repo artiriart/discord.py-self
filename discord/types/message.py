@@ -33,8 +33,8 @@ from .user import PartialUser
 from .emoji import PartialEmoji
 from .embed import Embed
 from .channel import ChannelType
-from .components import MessageActionRow
-from .interactions import MessageInteraction
+from .components import ComponentBase
+from .interactions import MessageInteraction, MessageInteractionMetadata
 from .application import BaseApplication, PartialApplication
 from .sticker import StickerItem
 from .threads import Thread, ThreadMember
@@ -102,6 +102,15 @@ class MessageActivity(TypedDict):
 
 MessageReferenceType = Literal[0, 1]
 
+class MessageApplication(TypedDict):
+    id: Snowflake
+    description: str
+    icon: Optional[str]
+    name: str
+    cover_image: NotRequired[str]
+
+
+MessageReferenceType = Literal[0, 1]
 
 class MessageReference(TypedDict, total=False):
     type: MessageReferenceType
@@ -111,9 +120,9 @@ class MessageReference(TypedDict, total=False):
     fail_if_not_exists: bool
 
 
-class Call(TypedDict):
-    participants: List[Snowflake]
-    ended_timestamp: Optional[str]
+class CallMessage(TypedDict):
+    participants: SnowflakeList
+    ended_timestamp: NotRequired[Optional[str]]
 
 
 class RoleSubscriptionData(TypedDict):
@@ -219,6 +228,7 @@ class Message(PartialMessage):
     sticker_items: NotRequired[List[StickerItem]]
     referenced_message: NotRequired[Optional[Message]]
     interaction: NotRequired[MessageInteraction]
+    interaction_metadata: NotRequired[MessageInteractionMetadata]
     components: NotRequired[List[MessageActionRow]]
     position: NotRequired[int]
     call: NotRequired[Call]

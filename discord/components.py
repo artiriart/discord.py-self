@@ -44,12 +44,16 @@ from .enums import (
     SelectDefaultValueType,
     SeparatorSpacing,
     MediaItemLoadingState,
+    InteractionType,
 )
 from .flags import AttachmentFlags
 from .colour import Colour
 from .file import File
 from .utils import get_slots, MISSING, _get_as_snowflake
 from .partial_emoji import PartialEmoji, _EmojiTag
+from .interactions import _wrapped_interaction
+from .utils import MISSING, _generate_nonce, get_slots
+from .interactions import Interaction
 
 if TYPE_CHECKING:
     from typing_extensions import Self
@@ -317,6 +321,39 @@ class Button(Component):
             payload['emoji'] = self.emoji.to_dict()
 
         return payload
+    
+    async def click(self, message) -> Union[str, Interaction]:
+        """|coro|
+
+        Clicks the button. Provide message as an argument.
+
+        Raises
+        -------
+        InvalidData
+            Didn't receive a response from Discord
+            (doesn't mean the interaction failed).
+        NotFound
+            The originating message was not found.
+        HTTPException
+            Clicking the button failed.
+
+        Returns
+        --------
+        Union[:class:`str`, :class:`Interaction`]
+            The button's URL or the interaction that was created.
+        """
+        if self.url:
+            return self.url
+
+        return await _wrapped_interaction(
+            message._state,
+            _generate_nonce(),
+            InteractionType.component,
+            None,
+            message.channel,  # type: ignore # channel is always correct here
+            self.to_dict(), # type:ignore
+            message=message,
+        )
 
 
 class SelectMenu(Component):
@@ -379,7 +416,7 @@ class SelectMenu(Component):
     __repr_info__: ClassVar[Tuple[str, ...]] = __slots__
 
     def __init__(self, data: SelectMenuPayload, /) -> None:
-        self.type: ComponentType = try_enum(ComponentType, data['type'])
+        self.type: ComponentType = try_enum(ComponentType, data['type']) #type:ignore
         self.custom_id: str = data['custom_id']
         self.placeholder: Optional[str] = data.get('placeholder')
         self.min_values: int = data.get('min_values', 1)

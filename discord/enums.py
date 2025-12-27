@@ -138,6 +138,10 @@ __all__ = (
     'OnboardingMode',
     'CollectibleType',
     'NameplatePalette',
+    'SelectDefaultValueType',
+    'SeparatorSpacing',
+    'MediaItemLoadingState',
+    'ComponentType',
 )
 
 
@@ -341,6 +345,28 @@ class MessageType(Enum):
             MessageType.thread_starter_message,
         }
 
+class ComponentType(Enum):
+    action_row = 1
+    button = 2
+    select = 3
+    string_select = 3
+    text_input = 4
+    user_select = 5
+    role_select = 6
+    mentionable_select = 7
+    channel_select = 8
+    section = 9
+    text_display = 10
+    thumbnail = 11
+    media_gallery = 12
+    file = 13
+    separator = 14
+    container = 17
+    label = 18
+    file_upload = 19
+
+    def __int__(self) -> int:
+        return self.value
 
 class SpeakingState(Enum):
     none = 0
@@ -1060,6 +1086,15 @@ class ApplicationDiscoverabilityState(Enum, comparable=True):
     featureable = 4
     blocked = 5
 
+class SeparatorSpacing(Enum):
+    small = 1
+    large = 2
+
+class MediaItemLoadingState(Enum):
+    unknown = 0
+    loading = 1
+    loaded = 2
+    not_found = 3
 
 class ApplicationBuildStatus(Enum):
     created = 'CREATED'
@@ -1760,6 +1795,10 @@ class ForumOrderType(Enum):
     latest_activity = 0
     creation_date = 1
 
+class SelectDefaultValueType(Enum):
+    user = 'user'
+    role = 'role'
+    channel = 'channel'
 
 class ReadStateType(Enum):
     channel = 0
